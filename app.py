@@ -69,7 +69,30 @@ if uploaded_file is not None:
             x, y, test_size=test_size, random_state=random_state
         )
 
-        
+        # Scale features
+        scaler = StandardScaler()
+        X_train_scaled = scaler.fit_transform(X_train)
+        X_test_scaled = scaler.transform(X_test)
+
+        st.sidebar.subheader("Model Selection")
+        model_options = ["Logistic Regression", "Decision Tree", "k-Nearest Neighbors", "Naive Bayes", "Random Forest", "XGBoost"]
+
+        selected_models = st.sidebar.multiselect("Select models to compare", model_options, default=model_options)
+
+        if st.sidebar.button("Run Models"):
+            st.header("Model Performance Comparison")
+            results = []
+            
+            models = {
+                "Logistic Regression": LogisticRegression(max_iter=1000, random_state=random_state),
+                "Decision Tree": DecisionTreeClassifier(random_state=random_state),
+                "k-Nearest Neighbors": KNeighborsClassifier(),
+                "Naive Bayes": GaussianNB(),
+                "Random Forest": RandomForestClassifier(n_estimators=100, random_state=random_state),
+                "XGBoost": XGBClassifier(random_state=random_state, eval_metric='logloss')
+            }
+
+
         
         
 
